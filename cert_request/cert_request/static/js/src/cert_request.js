@@ -1,26 +1,38 @@
 /* Javascript for CertRequestXBlock. */
 function CertRequestXBlock(runtime, element) {
 
-    function updatePara(result) {
-        $('.string_block', element).text(result.string);
-        $('.count_block', element).text(result.count);
-        //setTimeout(updateText, 3000);
-    }
+          function reloadPage(){
+               location.reload();
+	       //return;
+          }
 
-    var handlerUrl = runtime.handlerUrl(element, 'get_para_text');
+          var handlerUrlCert = runtime.handlerUrl(element,'generate_user_cert_xblock');
 
-
-   function updateText() {
+          function request_certificate() {
+                course = $('#course').val();
+                student = $('#student').val();
                 $.ajax({
                 type: "POST",
-                url: handlerUrl,
-                data: JSON.stringify({"hello": "world"}),
-                success: updatePara
-       });
-   }
+                url: handlerUrlCert,
+                data: JSON.stringify({"course": course,"student":student}),
+                success: reloadPage
+          });
+         }
+
+
 
 
     $(function ($) {
-         updateText();
+	 
+	 $('#btn_generate_cert').click(function(){request_certificate();});
+
+
+
+
+
+
+
+
+
     });
 }
