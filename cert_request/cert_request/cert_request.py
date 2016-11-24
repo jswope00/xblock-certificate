@@ -188,6 +188,15 @@ def get_grades(course,student):
         )
         max_scores_cache = MaxScoresCache.create_for_course(course)
 
+
+	## Fix for grading certificate subsection issue 
+	tem_set = set()
+        for set_item in field_data_cache.scorable_locations:
+                set_item = set_item.version_agnostic()
+                set_item = set_item.replace(branch=None)
+                tem_set.update([set_item])
+        field_data_cache.scorable_locations = tem_set
+
         # For the moment, we have to get scorable_locations from field_data_cache
         # and not from scores_client, because scores_client is ignorant of things
         # in the submissions API. As a further refactoring step, submissions should
@@ -219,6 +228,13 @@ def get_grades(course,student):
                     			descriptor.location.to_deprecated_string() in submissions_scores
                     			for descriptor in section['xmoduledescriptors']
                 		)
+
+			## Fix for grading certificate subsection issue 
+			for descriptor in section['xmoduledescriptors']:
+                                descriptor.location = descriptor.location.version_agnostic()
+                                descriptor.location =  descriptor.location.replace(branch=None)
+
+
 
             		if not should_grade_section:
                 		
