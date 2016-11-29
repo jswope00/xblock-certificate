@@ -247,12 +247,16 @@ def get_grades(course,student):
             		if should_grade_section:
                 		scores = []
 
-                		def create_module(descriptor):
-                    			'''creates an XModule instance given a descriptor'''
-                    			#TODO: We need the request to pass into here. If we could forego that, our arguments
-                    			# would be simpler
-                    			
-                        		pass
+				try:
+                                        create_module = section_descriptor.xmodule_runtime.get_module
+                                except :
+
+                                        def create_module(descriptor):
+                                                '''creates an XModule instance given a descriptor'''
+                                                #TODO: We need the request to pass into here. If we could forego that, our arguments
+                                                # would be simpler
+
+                                                pass
 
                 		for module_descriptor in yield_dynamic_descriptor_descendants(section_descriptor, student.id, create_module):
 					(correct, total) = get_score(
